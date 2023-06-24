@@ -86,3 +86,14 @@ export const getUserId = (name: string): string => {
 export const getUserName = (id: string): string => {
 	return arrUsers.filter((item) => item.id === id)[0].id;
 };
+
+export const changeTaskText = (id: string, taskId: string, newText: string) => {
+	if (arrUsers.find((item) => item.id === id)) {
+		const myUser = arrUsers.filter((item) => item.id === id)[0];
+		if (myUser.task.find((item) => item.taskId === taskId)) {
+			// myUser.task.filter((item) => item.taskId === taskId)[0].text = newText;
+			myUser.task.find((item) => item.taskId === taskId)!.text = newText;
+		}
+	}
+	setData();
+};
