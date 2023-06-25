@@ -10,7 +10,13 @@ import {useNavigate} from 'react-router-dom';
 export const List = () => {
 	const [text, setText] = useState('');
 	const [disabled, setDisabled] = useState(true);
-	const task: { taskId: string; text: string; status: string }[] = useAppSelector(
+	const [priority, setPriority] = useState('Ordinary');
+	const task: {
+		taskId: string;
+		text: string;
+		status: string;
+		priority: string;
+	}[] = useAppSelector(
 		(state) => state.userReducer.task,
 	);
 	const id = useAppSelector((state) => state.userReducer.id);
@@ -46,9 +52,10 @@ export const List = () => {
 
 	const newTask = (e: React.FormEvent<EventTarget>) => {
 		e.preventDefault();
-		addTask(id, text, 'In progress');
+		addTask(id, text, 'In progress', priority);
 		dispatch(setUserTask(getTask(id)));
 		setText('');
+		setPriority('Ordinary');
 	};
 
 	return (
@@ -66,7 +73,11 @@ export const List = () => {
 								placeholder='enter new task'
 							/>
 						</label>
-
+						<select value={priority} onChange={(e) => setPriority(e.target.value)} className='form-select mb-3 me-3' >
+							<option value='table-light'>Ordinary</option>
+							<option value='table-warning'>Important</option>
+							<option value='table-danger'>Urgent</option>
+						</select>
 							<Button type='submit' className='me-3 mb-3' disabled={disabled}>
 								Save
 							</Button>

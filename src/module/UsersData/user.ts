@@ -3,10 +3,20 @@ import {generateRandomId} from '../../utils/randomNumber';
 type TUser = {
 	id: string;
 	name: string;
-	task: { taskId: string; text: string; status: string }[];
+	task: {
+		taskId: string;
+		text: string;
+		status: string;
+		priority: string;
+	}[];
 };
 
-type TTasks = { taskId: string; text: string; status: string }[];
+type TTasks = {
+	taskId: string;
+	text: string;
+	status: string;
+	priority: string
+}[];
 
 export let arrUsers: TUser[] = [];
 
@@ -42,11 +52,11 @@ export const addUserInArr = (name: string): void => {
 	setData();
 };
 
-export const addTask = (id: string, text: string, status: string) => {
+export const addTask = (id: string, text: string, status: string, priority: string) => {
 	if (arrUsers.find((item) => item.id === id)) {
 		arrUsers
 			.filter((item) => item.id === id)
-			.map((item) => item.task.push({ taskId: generateRandomId(), text, status }));
+			.map((item) => item.task.push({taskId: generateRandomId(), text, status, priority}));
 	}
 	setData();
 };

@@ -5,12 +5,16 @@ import {setUserTask} from '../../../store/reducer';
 import {changeStatus, changeTaskText, delTask, getTask} from '../../UsersData/user';
 
 interface IProps {
-	item: {taskId: string; text: string; status: string};
+	item: {
+		taskId: string;
+		text: string;
+		status: string;
+		priority: string};
 	index: number;
 }
 
 export const TableBody = ({item, index}: IProps) => {
-	const {taskId, text, status} = item;
+	const {taskId, text, status, priority} = item;
 	const [statusTask, setStatusTask] = useState(false);
 	const dispatch = useAppDispatch();
 	const [isEditing, setIsEditing] = useState(false);
@@ -44,9 +48,20 @@ export const TableBody = ({item, index}: IProps) => {
 		dispatch(setUserTask(getTask(id)));
 	}, [dispatch, id, statusTask]);
 
+	const getPriorityClassName = () => {
+		switch (priority) {
+			case 'table-warning':
+				return 'table-warning';
+			case 'table-danger':
+				return 'table-danger';
+			default:
+				return 'table-light';
+		}
+	};
+
 	return (
 		<>
-			<tr className={statusTask ? 'table-success' : 'table-light'} data-task-id={taskId}>
+			<tr className={`${statusTask ? 'table-success' : getPriorityClassName()}`} data-task-id={taskId}>
 				<td>{index + 1}</td>
 				{isEditing ?
 					<td>
@@ -75,6 +90,7 @@ export const TableBody = ({item, index}: IProps) => {
 						className='mb-1'
 						variant="secondary"
 						onClick={editTask}
+						disabled={statusTask}
 					>
 						Edit
 					</Button>
