@@ -1,8 +1,9 @@
 import {useEffect, useState} from 'react';
-import { Button } from 'react-bootstrap';
+import {Button} from 'react-bootstrap';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {setUserTask} from '../../../store/reducer';
 import {changeStatus, changeTaskText, delTask, getTask} from '../../UsersData/user';
+import {ConfirmModal} from './ConfirmModal/ConfirmModal';
 
 interface IProps {
 	item: {
@@ -19,12 +20,18 @@ export const TableBody = ({item, index}: IProps) => {
 	const dispatch = useAppDispatch();
 	const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(text);
+	const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 	const id: string = useAppSelector((state) => state.userReducer.id);
 
 	const deleteTask = () => {
+		setIsConfirmModalOpen(true);
+	};
+
+	const onConfirm = () => {
+		setIsConfirmModalOpen(false);
 		delTask(id, taskId);
 		dispatch(setUserTask(getTask(id)));
-	};
+	}
 
 	const doneTask = () => {
 		setStatusTask(!statusTask);
@@ -96,6 +103,12 @@ export const TableBody = ({item, index}: IProps) => {
 					</Button>
 				</td>
 			</tr>
+			<ConfirmModal 
+				isOpen={isConfirmModalOpen}
+				onClose={() => setIsConfirmModalOpen(false)}
+				onConfirm={onConfirm}
+				taskText={text}
+			/>
 		</>
 	);
 };

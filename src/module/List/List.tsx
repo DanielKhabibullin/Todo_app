@@ -73,7 +73,12 @@ export const List = () => {
 								placeholder='enter new task'
 							/>
 						</label>
-						<select value={priority} onChange={(e) => setPriority(e.target.value)} className='form-select mb-3 me-3' >
+						<select
+							value={priority}
+							onChange={(e) => setPriority(e.target.value)}
+							className='form-select mb-3 me-3'
+							style={{maxWidth: '121px'}}
+						>
 							<option value='table-light'>Ordinary</option>
 							<option value='table-warning'>Important</option>
 							<option value='table-danger'>Urgent</option>
