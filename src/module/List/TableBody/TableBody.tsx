@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {Button} from 'react-bootstrap';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {setUserTask} from '../../../store/reducer';
@@ -19,9 +19,10 @@ export const TableBody = ({item, index}: IProps) => {
 	const [statusTask, setStatusTask] = useState(false);
 	const dispatch = useAppDispatch();
 	const [isEditing, setIsEditing] = useState(false);
-  const [editedText, setEditedText] = useState(text);
+	const [editedText, setEditedText] = useState(text);
 	const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
 	const id: string = useAppSelector((state) => state.userReducer.id);
+	const tdRef = useRef<HTMLTableCellElement>(null);
 
 	const deleteTask = () => {
 		setIsConfirmModalOpen(true);
@@ -31,7 +32,7 @@ export const TableBody = ({item, index}: IProps) => {
 		setIsConfirmModalOpen(false);
 		delTask(id, taskId);
 		dispatch(setUserTask(getTask(id)));
-	}
+	};
 
 	const doneTask = () => {
 		setStatusTask(!statusTask);
@@ -41,19 +42,26 @@ export const TableBody = ({item, index}: IProps) => {
 
 	const editTask = () => {
 		setIsEditing(true);
-		setEditedText(text);
-	}
+	};
 
-	const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		changeTaskText(id, taskId, editedText);
+	const handleEdit = (e: React.FocusEvent<HTMLTableCellElement>) => {
+		const editedValue = e.currentTarget.textContent || '';
+		changeTaskText(id, taskId, editedValue);
 		setIsEditing(false);
+		setEditedText(editedValue);
 		dispatch(setUserTask(getTask(id)));
-	}
+	};
 
 	useEffect(() => {
 		dispatch(setUserTask(getTask(id)));
 	}, [dispatch, id, statusTask]);
+
+	useEffect(() => {
+		if (isEditing && tdRef.current) {
+			const tdElement = tdRef.current;
+			tdElement.focus();
+		}
+	}, [isEditing]);
 
 	const getPriorityClassName = () => {
 		switch (priority) {
@@ -71,13 +79,27 @@ export const TableBody = ({item, index}: IProps) => {
 			<tr className={`${statusTask ? 'table-success' : getPriorityClassName()}`} data-task-id={taskId}>
 				<td>{index + 1}</td>
 				{isEditing ?
-					<td>
-						<form onSubmit={handleEdit}>
-							<input type="text" value={editedText} onChange={(e) => setEditedText(e.target.value)} />
-						</form>
+					<td
+						ref={tdRef} 
+						contentEditable={true}
+						suppressContentEditableWarning={true}
+						onBlur={handleEdit}
+						onKeyDown={(e) => {
+							if (e.key === 'Enter') {
+								e.preventDefault();
+								e.currentTarget.blur();
+							}
+						}}
+					>
+						{editedText}
 					</td>
 					:
-					<td className={statusTask ? 'text-decoration-line-through table-success' : ''}>{text}</td>
+					<td
+						className={`${statusTask ? 'text-decoration-line-through table-success' : ''}`}
+						onDoubleClick={() => setIsEditing(true)}
+					>
+						{text}
+					</td>
 				}
 				<td>{status}</td>
 				<td>
@@ -103,7 +125,7 @@ export const TableBody = ({item, index}: IProps) => {
 					</Button>
 				</td>
 			</tr>
-			<ConfirmModal 
+			<ConfirmModal
 				isOpen={isConfirmModalOpen}
 				onClose={() => setIsConfirmModalOpen(false)}
 				onConfirm={onConfirm}

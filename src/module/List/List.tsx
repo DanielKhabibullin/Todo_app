@@ -4,7 +4,6 @@ import {useAppDispatch, useAppSelector} from '../../hooks';
 import {addTask, getData, getTask, getUserName} from '../UsersData/user';
 import {setUser, setUserId, setUserTask} from '../../store/reducer';
 import {Button, Table} from 'react-bootstrap';
-import {ClearTable} from '../ClearTable/ClearTable';
 import {useNavigate} from 'react-router-dom';
 
 export const List = () => {
@@ -121,12 +120,15 @@ export const List = () => {
 						</thead>
 
 						<tbody>
-							{task === null ? (
-								<ClearTable />
-							) : task.length !== 0 ? (
-								task.map((item, index) => <TableBody key={item.taskId} item={item} index={index} />)
+							{task === null || task.length === 0 ? (
+								<tr></tr>
 							) : (
-								<ClearTable />
+								task.map((item, index) =>
+								<TableBody
+									key={item.taskId}
+									item={item}
+									index={index}
+								/>)
 							)}
 						</tbody>
 					</Table>
