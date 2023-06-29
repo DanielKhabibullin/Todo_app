@@ -1,9 +1,9 @@
-import { Button } from 'react-bootstrap';
-import { useAppDispatch } from '../../hooks';
-import { useEffect, useState } from 'react';
-import { addUserInArr, getData, getUserId } from '../UsersData/user';
-import { useNavigate } from 'react-router-dom';
-import { setUser, setUserId } from '../../store/reducer';
+import {Button} from 'react-bootstrap';
+import {useAppDispatch} from '../../hooks';
+import {useEffect, useState} from 'react';
+import {addUserInArr, getData, getUserId} from '../../UsersData/user';
+import {useNavigate} from 'react-router-dom';
+import {setUser, setUserId} from '../../store/reducer';
 
 export const Home = () => {
 	const navigate = useNavigate();
@@ -44,7 +44,7 @@ export const Home = () => {
 	});
 
 	return (
-		<div className='app-container vh-100 w-100 d-flex align-items-center justify-content-center flex-column'>
+		<>
 			<h1 className='d-flex align-items-center'>ToDo List</h1>
 			<span className='d-block mb-2'>Please authenticate yourself</span>
 			<form onSubmit={addUser} className='d-flex align-items-center'>
@@ -62,6 +62,6 @@ export const Home = () => {
 					Sign in
 				</Button>
 			</form>
-		</div>
+		</>
 	);
 };

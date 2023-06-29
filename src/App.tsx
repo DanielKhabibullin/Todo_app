@@ -1,17 +1,27 @@
-import {Route, Routes} from 'react-router-dom';
+import {
+	createBrowserRouter,
+	createRoutesFromElements,
+	Route,
+	RouterProvider
+} from 'react-router-dom';
 import {Home} from './module/Home/Home';
 import {List} from './module/List/List';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {Layout} from './module/Layout/Layout';
+
 
 const App = () => {
-	return (
-		<div className='app-container vh-100 w-100 d-flex align-items-center justify-content-center flex-column p-3'>
-			<Routes>
-				<Route path='/user/:id' element={<List />} />
-				<Route path='/' element={<Home />} />
-			</Routes>
-		</div>
-	);
+
+	const router = createBrowserRouter(
+		createRoutesFromElements(
+			<Route path="/" element={<Layout />}>
+					<Route index element={<Home />} />
+					<Route path="user/:id" element={<List />} />
+			</Route>
+		)
+	)
+
+	return <RouterProvider router={router}/>
 }
 
 export default App;

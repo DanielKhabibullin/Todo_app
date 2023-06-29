@@ -1,4 +1,4 @@
-import {generateRandomId} from '../../utils/randomNumber';
+import {generateRandomId} from '../utils/randomNumber';
 
 type TUser = {
 	id: string;

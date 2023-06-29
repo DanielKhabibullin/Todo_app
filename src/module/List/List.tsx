@@ -1,15 +1,16 @@
 import {TableBody} from './TableBody/TableBody';
 import {useState, useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from '../../hooks';
-import {addTask, getData, getTask, getUserName} from '../UsersData/user';
+import {addTask, getData, getTask, getUserName} from '../../UsersData/user';
 import {setUser, setUserId, setUserTask} from '../../store/reducer';
 import {Button, Table} from 'react-bootstrap';
-import {useNavigate} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 
 export const List = () => {
 	const [text, setText] = useState('');
 	const [disabled, setDisabled] = useState(true);
 	const [priority, setPriority] = useState('Ordinary');
+	let location = useLocation();
 	const task: {
 		taskId: string;
 		text: string;
@@ -20,7 +21,6 @@ export const List = () => {
 	);
 	const id = useAppSelector((state) => state.userReducer.id);
 	const dispatch = useAppDispatch();
-	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (text.length > 0) {
@@ -33,14 +33,12 @@ export const List = () => {
 	useEffect(() => {
 		getData();
 	}, []);
-
 	useEffect(() => {
-		// eslint-disable-next-line no-restricted-globals
 		const id = location.pathname.slice(6);
 		dispatch(setUser(getUserName(id)));
 		dispatch(setUserTask(getTask(id)));
 		dispatch(setUserId(id));
-	}, [dispatch]);
+	}, [dispatch, location.pathname]);
 
 	const handleChange = (e: React.ChangeEvent<EventTarget>) => {
 		e.preventDefault();
@@ -100,12 +98,9 @@ export const List = () => {
 							<Button
 							className='text-nowrap mb-3'
 							variant="secondary"
-							onClick={() => {
-								navigate('/');
-							}}
 							type='submit'
 						>
-							Sign Out
+							<Link to='/' className='text-decoration-none text-white'>Sign Out</Link>
 						</Button>
 					</div>
 				</form>

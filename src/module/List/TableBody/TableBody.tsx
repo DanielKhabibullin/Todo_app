@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 import {Button} from 'react-bootstrap';
 import {useAppDispatch, useAppSelector} from '../../../hooks';
 import {setUserTask} from '../../../store/reducer';
-import {changeStatus, changeTaskText, delTask, getTask} from '../../UsersData/user';
+import {changeStatus, changeTaskText, delTask, getTask} from '../../../UsersData/user';
 import {ConfirmModal} from './ConfirmModal/ConfirmModal';
 
 interface IProps {
